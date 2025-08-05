@@ -11,7 +11,8 @@ const main = async () => {
     await connectDB()
 
     server.listen(port, () => {
-        console.log(`Server running on port ${port}`)
+        console.log(`env                    : ${appConfig.env}`);
+        console.log(`Server running on port : ${port}`)
     })
 }
 main()

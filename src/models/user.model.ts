@@ -1,5 +1,5 @@
 import { Document, model, Schema } from "mongoose"
-import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middleware/db.middleware"
+import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middlewares/db.middleware"
 
 export interface IUser extends Document, SoftDeleteDocument {
     username: string
