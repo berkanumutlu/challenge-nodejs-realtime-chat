@@ -3,10 +3,27 @@ import dotenv from "dotenv"
 dotenv.config()
 
 export const env = {
-    NODE_ENV: process.env.NODE_ENV || "development",
-    PORT: Number(process.env.PORT) || 3000,
-    DB_URL: process.env.DB_URL || "",
-    REDIS_URL: process.env.REDIS_URL || "",
-    RABBITMQ_URL: process.env.RABBITMQ_URL || "",
-    JWT_SECRET: process.env.JWT_SECRET || "default_secret_key",
+    app: {
+        env: process.env.NODE_ENV || "development",
+        port: Number(process.env.PORT) || 3000,
+    },
+    db: {
+        url: process.env.DB_URL || "",
+    },
+    redis: {
+        url: process.env.REDIS_URL || "redis://localhost:6379",
+    },
+    rabbitmq: {
+        url: process.env.RABBITMQ_URL || "amqp://localhost",
+    },
+    jwt: {
+        access: {
+            key: process.env.JWT_ACCESS_SECRET_KEY || "default_access_secret_key",
+            expires: process.env.JWT_ACCESS_SECRET_KEY_EXPIRES || "15m",
+        },
+        refresh: {
+            key: process.env.JWT_REFRESH_SECRET_KEY || "default_refresh_secret_key",
+            expires: process.env.JWT_REFRESH_SECRET_KEY_EXPIRES || "7d",
+        },
+    },
 }

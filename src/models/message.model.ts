@@ -1,7 +1,8 @@
-import { Document, model, Schema, Types } from "mongoose"
+import { type Document, model, Schema, Types } from "mongoose"
 import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middlewares/db.middleware"
 
 export interface IMessageReadBy {
+    _id: Types.ObjectId
     userId: Types.ObjectId
     readAt: Date
 }

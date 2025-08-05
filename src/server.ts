@@ -8,11 +8,16 @@ const server = http.createServer(app)
 
 // Start the application
 const main = async () => {
-    await connectDB()
+    try {
+        await connectDB()
 
-    server.listen(port, () => {
-        console.log(`env                    : ${appConfig.env}`);
-        console.log(`Server running on port : ${port}`)
-    })
+        server.listen(port, () => {
+            console.log(`env                    : ${appConfig.env}`);
+            console.log(`Server running on port : ${port}`)
+        })
+    } catch (error) {
+        console.error("An error occurred while starting the server:", error)
+        process.exit(1)
+    }
 }
 main()
