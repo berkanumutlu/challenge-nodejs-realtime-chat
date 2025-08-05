@@ -1,7 +1,8 @@
 import http from "http"
 import app from "@/app"
+import { appConfig } from "@/config/app.config"
 
-const port = 3000
+const port = appConfig.port
 const server = http.createServer(app)
 
 // Start the application
