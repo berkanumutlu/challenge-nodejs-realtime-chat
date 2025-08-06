@@ -12,6 +12,7 @@ export const env = {
     },
     redis: {
         url: process.env.REDIS_URL || "redis://localhost:6379",
+        blacklistPrefix: process.env.REDIS_BLACKLIST_PREFIX || "blacklist:",
     },
     rabbitmq: {
         url: process.env.RABBITMQ_URL || "amqp://localhost",

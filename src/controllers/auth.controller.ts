@@ -24,9 +24,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
 export const logout = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        if (!req.user) return res.warning("Unauthorized", 401)
-
-        await logoutUser(req.user._id.toString())
+        await logoutUser(req.user.id.toString(), req.token as string)
 
         res.success(null, "User logged out successfully")
     } catch (error) {
@@ -36,8 +34,6 @@ export const logout = async (req: IAuthenticatedRequest, res: Response, next: Ne
 
 export const me = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        if (!req.user) return res.warning("Unauthorized", 401)
-
         res.success(req.user.toObject())
     } catch (error) {
         next(error)
