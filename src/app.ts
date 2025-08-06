@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import { appConfig } from "@/config/app.config"
 import routes from "@/routes"
 import { responseHandler } from "@/middlewares/response.middleware"
 import { errorHandler } from "@/middlewares/error.middleware"
@@ -8,7 +9,7 @@ import { errorHandler } from "@/middlewares/error.middleware"
 const app = express()
 
 // Middlewares
-app.use(cors())
+app.use(cors(appConfig.cors))
 app.use(express.json())
 app.use(responseHandler)
 

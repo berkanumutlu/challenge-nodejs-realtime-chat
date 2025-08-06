@@ -26,4 +26,9 @@ export const env = {
             expires: process.env.JWT_REFRESH_SECRET_KEY_EXPIRES || "7d",
         },
     },
+    cors: {
+        origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : "*",
+        methods: process.env.CORS_METHODS || "GET,HEAD,PUT,PATCH,POST,DELETE",
+        credentials: process.env.CORS_CREDENTIALS === "true",
+    },
 }
