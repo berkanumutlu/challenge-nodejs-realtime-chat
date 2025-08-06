@@ -13,7 +13,7 @@ export const validateRequestBody = (schema: ZodSchema) => {
         try {
             if (!req.body || Object.keys(req.body).length === 0) {
                 const errors = getRequiredFieldErrors(schema)
-                return res.status(400).json(createResponse(false, 400, "Validation failed", null, errors))
+                return res.status(400).json(createResponse(false, 400, "ValidationError", null, errors))
             }
 
             const validatedData = schema.parse(req.body)

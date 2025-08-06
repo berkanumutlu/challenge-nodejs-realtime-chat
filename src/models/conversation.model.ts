@@ -10,6 +10,8 @@ export interface IConversation extends Document, SoftDeleteDocument {
     updatedAt: Date
 }
 
+const excludedFields = ["_id", "__v", "createdBy", "updatedAt", "deletedAt", "deletedBy"]
+
 const conversationSchema = new Schema<IConversation>(
     {
         participants: [{ type: Schema.Types.ObjectId, ref: "User", required: true }],
@@ -20,6 +22,26 @@ const conversationSchema = new Schema<IConversation>(
     },
     {
         timestamps: true,
+        toJSON: {
+            virtuals: true,
+            transform: (_doc, ret) => {
+                const retObj = ret as Record<string, any>
+                excludedFields.forEach((field) => {
+                    delete retObj[field]
+                })
+                return retObj
+            },
+        },
+        toObject: {
+            virtuals: true,
+            transform: (_doc, ret) => {
+                const retObj = ret as Record<string, any>
+                excludedFields.forEach((field) => {
+                    delete retObj[field]
+                })
+                return retObj
+            },
+        },
     }
 )
 

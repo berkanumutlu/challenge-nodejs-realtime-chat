@@ -15,7 +15,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
             field: e.path.join("."),
             message: e.message,
         }))
-        return res.status(400).json(createResponse(false, 400, "Validation failed", null, errors))
+        return res.status(400).json(createResponse(false, 400, "ValidationError", null, errors))
     }
 
     if (err instanceof JsonWebTokenError) {
@@ -30,7 +30,7 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
     if (err.code === 11000) {
         const field = Object.keys(err.keyValue)[0]
         const value = field ? err.keyValue[field] : undefined
-        return res.status(409).json(createResponse(false, 409, `Duplicate value for ${field}: '${value}'. This ${field} is already in use.`, null, [{ field, message: `This ${field} is already in use.` }]))
+        return res.status(409).json(createResponse(false, 409, `Duplicate value for ${field}: '${value}'. This ${field} is already in use`, null, [{ field, message: `This ${field} is already in use` }]))
     }
 
     let errors = err

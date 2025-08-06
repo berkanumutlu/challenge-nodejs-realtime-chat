@@ -24,7 +24,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
 
 export const logout = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        await logoutUser(req.user.id.toString(), req.token as string)
+        await logoutUser(req.user.id, req.token as string)
 
         res.success(null, "User logged out successfully")
     } catch (error) {

@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { isValidObjectId } from "@/validations/db.validation"
 
 const usernameRegex = /^[a-zA-Z0-9_-]+$/
 
@@ -28,3 +29,10 @@ export type RefreshTokenInputType = z.infer<typeof refreshTokenSchema>
 
 export const updateUserSchema = registerSchema.partial().strict()
 export type UpdateUserInputType = z.infer<typeof updateUserSchema>
+
+export const userIdParamSchema = z.object({
+    userId: z.string().refine(isValidObjectId, {
+        message: "Invalid userId",
+    }),
+})
+export type UserIdParamType = z.infer<typeof userIdParamSchema>

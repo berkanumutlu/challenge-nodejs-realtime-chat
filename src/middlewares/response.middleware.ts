@@ -18,11 +18,11 @@ export const createResponse = (
 }
 
 export const responseHandler = (req: Request, res: Response, next: NextFunction) => {
-    res.success = (data: any, message = "Success", status = 200): void => {
+    res.success = (data: any, message: string = "Success", status: number = 200): void => {
         res.status(status).json(createResponse(true, status, message, data))
     }
 
-    res.warning = (message = "Warning", status = 200): void => {
+    res.warning = (message: string = "Warning", status: number = 200): void => {
         res.status(status).json(createResponse(false, status, message))
     }
 
