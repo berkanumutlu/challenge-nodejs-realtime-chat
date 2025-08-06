@@ -1,13 +1,25 @@
 import http from "http"
 import app from "@/app"
+import { appConfig } from "@/config/app.config"
+import { connectDB } from "@/services/db.service"
+import { connectRedis } from "@/services/redis.service"
 
-const port = 3000
+const port = appConfig.port
 const server = http.createServer(app)
 
 // Start the application
 const main = async () => {
-    server.listen(port, () => {
-        console.log(`Server running on port ${port}`)
-    })
+    try {
+        await connectDB()
+        await connectRedis()
+
+        server.listen(port, () => {
+            console.log(`env                    : ${appConfig.env}`)
+            console.log(`Server running on port : ${port}`)
+        })
+    } catch (error) {
+        console.error("An error occurred while starting the server:", error)
+        process.exit(1)
+    }
 }
 main()
