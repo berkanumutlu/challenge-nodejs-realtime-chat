@@ -16,6 +16,8 @@ export interface IMessage extends Document, SoftDeleteDocument {
     updatedAt: Date
 }
 
+const excludedFields = ["_id", "__v", "conversationId", "updatedAt", "deletedBy"]
+
 const readBySchema = new Schema<IMessageReadBy>({
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     readAt: { type: Date, required: true },
@@ -32,6 +34,26 @@ const messageSchema = new Schema<IMessage>(
     },
     {
         timestamps: true,
+        toJSON: {
+            virtuals: true,
+            transform: (_doc, ret) => {
+                const retObj = ret as Record<string, any>
+                excludedFields.forEach((field) => {
+                    delete retObj[field]
+                })
+                return retObj
+            },
+        },
+        toObject: {
+            virtuals: true,
+            transform: (_doc, ret) => {
+                const retObj = ret as Record<string, any>
+                excludedFields.forEach((field) => {
+                    delete retObj[field]
+                })
+                return retObj
+            },
+        },
     }
 )
 
