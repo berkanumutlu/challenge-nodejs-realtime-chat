@@ -35,8 +35,8 @@ export const registerUser = async (data: RegisterInputType) => {
 
     const user = await createUser(data)
 
-    const { accessToken, refreshToken } = generateUserTokens(user.id.toString())
-    await updateUserRecord(user.id.toString(), { refreshToken })
+    const { accessToken, refreshToken } = generateUserTokens(user.id)
+    await updateUserRecord(user.id, { refreshToken })
 
     return { accessToken, refreshToken }
 }
@@ -48,8 +48,8 @@ export const loginUser = async (data: LoginInputType) => {
     const isPasswordValid = await compareEncryptedText(data.password, user.password)
     if (!isPasswordValid) throw new CustomHttpError(401, "Invalid credentials")
 
-    const { accessToken, refreshToken } = generateUserTokens(user.id.toString())
-    await updateUserRecord(user.id.toString(), { refreshToken })
+    const { accessToken, refreshToken } = generateUserTokens(user.id)
+    await updateUserRecord(user.id, { refreshToken })
 
     return { user, accessToken, refreshToken }
 }
@@ -81,8 +81,8 @@ export const refreshAccessToken = async (data: RefreshTokenInputType) => {
         addAccessTokenToBlacklist(data?.accessToken)
     }
 
-    const { accessToken, refreshToken } = generateUserTokens(user.id.toString())
-    await updateUserRecord(user.id.toString(), { refreshToken })
+    const { accessToken, refreshToken } = generateUserTokens(user.id)
+    await updateUserRecord(user.id, { refreshToken })
 
     return { accessToken, refreshToken }
 }

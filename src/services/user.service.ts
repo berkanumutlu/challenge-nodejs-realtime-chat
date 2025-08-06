@@ -1,10 +1,11 @@
+import { Types } from "mongoose"
 import { User, type IUser } from "@/models/user.model"
 
 export const findAllUsers = async (
     query: Record<string, any> = {},
     limit: number = 0,
     offset: number = 0,
-): Promise<{ users: IUser[], total: number }> => {
+): Promise<{ users: IUser[]; total: number }> => {
     const usersQuery = User.find(query).select("-password -refreshToken")
 
     if (limit > 0) {
@@ -33,6 +34,22 @@ export const findUserByEmail = async (email: string) => {
 
 export const findUserByUsername = async (username: string) => {
     return await User.findOne({ username, isActive: true }).select("_id")
+}
+
+export const checkUsersExistAndActive = async (userIds: string[]): Promise<boolean> => {
+    if (userIds.length === 0) {
+        return true
+    }
+
+    const objectIds = userIds.map(id => new Types.ObjectId(id))
+
+    const foundUsersCount = await countUsers({
+        _id: { $in: objectIds },
+        isActive: true,
+        deletedAt: null,
+    })
+
+    return foundUsersCount === userIds.length
 }
 
 export const countUsers = async (query: Record<string, any> = {}) => {

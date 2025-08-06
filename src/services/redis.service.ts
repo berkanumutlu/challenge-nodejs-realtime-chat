@@ -19,7 +19,7 @@ export const connectRedis = async () => {
 
 export const getRedisClient = (): RedisClientType => {
     if (!redisClient || !redisClient.isOpen) {
-        throw new Error("Redis client is not connected.")
+        throw new Error("Redis client is not connected")
     }
     return redisClient
 }
