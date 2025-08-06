@@ -1,5 +1,9 @@
 import { Types } from "mongoose"
+import { redisConfig } from "@/config/redis.config"
 import { User, type IUser } from "@/models/user.model"
+import { getRedisClient } from "@/services/redis.service"
+
+const REDIS_ONLINE_USERS_KEY = redisConfig.onlineUsersKey
 
 export const findAllUsers = async (
     query: Record<string, any> = {},
@@ -71,4 +75,65 @@ export const deleteUser = async (id: string, deletedBy?: string) => {
 
 export const forceDeleteUser = async (id: string) => {
     return await User.findByIdAndDelete(id)
+}
+
+export const addOnlineUser = async (userId: string): Promise<number> => {
+    const client = getRedisClient()
+
+    return await client.sAdd(REDIS_ONLINE_USERS_KEY, userId)
+}
+
+export const removeOnlineUser = async (userId: string): Promise<number> => {
+    const client = getRedisClient()
+
+    return await client.sRem(REDIS_ONLINE_USERS_KEY, userId)
+}
+
+export const isUserOnline = async (userId: string): Promise<boolean> => {
+    const client = getRedisClient()
+    const result = await client.sIsMember(REDIS_ONLINE_USERS_KEY, userId)
+
+    return result === 1
+}
+
+export const getOnlineUsersCount = async (): Promise<number> => {
+    const client = getRedisClient()
+
+    return await client.sCard(REDIS_ONLINE_USERS_KEY)
+}
+
+export const getOnlineUserIds = async (): Promise<string[]> => {
+    const client = getRedisClient()
+
+    return await client.sMembers(REDIS_ONLINE_USERS_KEY)
+}
+
+export const getPaginatedOnlineUsers = async (
+    limit: number = 0,
+    offset: number = 0,
+    fetchUserDetails: boolean = false,
+): Promise<{ users: IUser[] | string[]; total: number }> => {
+    const allOnlineUserIds = await getOnlineUserIds()
+    const totalOnlineUsers = allOnlineUserIds.length
+
+    let paginatedOnlineUserIds: string[]
+
+    if (limit > 0) {
+        paginatedOnlineUserIds = allOnlineUserIds.slice(offset, offset + limit)
+    } else {
+        paginatedOnlineUserIds = allOnlineUserIds.slice(offset)
+    }
+
+    if (fetchUserDetails) {
+        const onlineUsers = await Promise.all(
+            paginatedOnlineUserIds.map(async (id) => {
+                const user = await findUserById(id)
+                return user ? user.toObject() : null
+            }),
+        )
+        const filteredOnlineUsers = onlineUsers.filter(Boolean) as IUser[]
+        return { users: filteredOnlineUsers, total: totalOnlineUsers }
+    } else {
+        return { users: paginatedOnlineUserIds, total: totalOnlineUsers }
+    }
 }
