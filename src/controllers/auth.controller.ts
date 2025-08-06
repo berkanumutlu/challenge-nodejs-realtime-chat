@@ -4,9 +4,9 @@ import { loginUser, logoutUser, refreshAccessToken, registerUser } from "@/servi
 
 export const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        await registerUser(req.body)
+        const responseData = await registerUser(req.body)
 
-        res.success(null, "User registered", 201)
+        res.success(responseData, "User registered successfully", 201)
     } catch (error) {
         next(error)
     }
@@ -28,7 +28,7 @@ export const logout = async (req: IAuthenticatedRequest, res: Response, next: Ne
 
         await logoutUser(req.user._id.toString())
 
-        res.success(null, "Logged out successfully")
+        res.success(null, "User logged out successfully")
     } catch (error) {
         next(error)
     }
