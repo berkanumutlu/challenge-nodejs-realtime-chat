@@ -117,7 +117,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
                 })
 
                 await updateConversationLastMessage(conversationId, message.id)
-                console.log(`Conversation ${conversationId} lastMessageId updated to ${message.id}.`)
+                console.log(`Conversation ${conversationId} lastMessageId updated to ${message.id}`)
 
                 const roomKey = getRoomKey(conversationId)
                 io.to(roomKey).emit("message_received", {

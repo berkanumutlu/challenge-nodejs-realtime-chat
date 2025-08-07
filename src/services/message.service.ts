@@ -1,15 +1,6 @@
 import { Types } from "mongoose"
 import { Message, type IMessage } from "@/models/message.model"
 
-export const createMessage = async (data: {
-    conversationId: Types.ObjectId
-    senderId: Types.ObjectId
-    content: string
-}): Promise<IMessage> => {
-    const newMessage = new Message(data)
-    return await newMessage.save()
-}
-
 export const findMessagesByConversationId = async (conversationId: string, limit: number = 0, offset: number = 0): Promise<{ messages: IMessage[]; total: number }> => {
     const query = { conversationId: new Types.ObjectId(conversationId) }
     const messagesQuery = Message.find(query).populate("senderId", "username email").sort({ createdAt: 1 })
@@ -26,6 +17,14 @@ export const findMessagesByConversationId = async (conversationId: string, limit
     return { messages, total }
 }
 
+export const createMessage = async (data: {
+    conversationId: Types.ObjectId
+    senderId: Types.ObjectId
+    content: string
+}): Promise<IMessage> => {
+    const newMessage = new Message(data)
+    return await newMessage.save()
+}
 
 export const markMessageAsRead = async (messageId: string, userId: string): Promise<IMessage | null> => {
     const message = await Message.findById(messageId)

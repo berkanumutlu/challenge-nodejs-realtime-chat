@@ -17,6 +17,8 @@ export const env = {
     },
     rabbitmq: {
         url: process.env.RABBITMQ_URL || "amqp://localhost",
+        user: process.env.RABBITMQ_USER || "guest",
+        password: process.env.RABBITMQ_PASSWORD || "guest",
     },
     jwt: {
         access: {

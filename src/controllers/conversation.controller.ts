@@ -55,17 +55,17 @@ export const createNewConversation = async (req: IAuthenticatedRequest, res: Res
         const allParticipantIds = [...new Set([...participantIds, req.user.id])]
 
         if (allParticipantIds.length < 2) {
-            return res.warning("A conversation must have at least two participants.", 400)
+            return res.warning("A conversation must have at least two participants", 400)
         }
 
         const allParticipantsValid = await checkUsersExistAndActive(allParticipantIds)
         if (!allParticipantsValid) {
-            return res.warning("One or more participantIds are invalid, inactive, or deleted.", 400)
+            return res.warning("One or more participantIds are invalid, inactive, or deleted", 400)
         }
 
         const existingConversation = await findExistingConversationByParticipants(allParticipantIds)
         if (existingConversation) {
-            return res.success(existingConversation.toObject(), "Conversation already exists.")
+            return res.success(existingConversation.toObject(), "Conversation already exists")
         }
 
         const newConversation = await createConversation(allParticipantIds, req.user.id)
@@ -100,7 +100,7 @@ export const leaveConversation = async (req: IAuthenticatedRequest, res: Respons
                 conversationId,
                 userId,
                 username,
-                message: `${username} has left the conversation (conversation closed).`,
+                message: `${username} has left the conversation (conversation closed)`,
             })
             return res.success(null, "Conversation closed successfully as you were the last participant", 200)
         }
@@ -112,7 +112,7 @@ export const leaveConversation = async (req: IAuthenticatedRequest, res: Respons
                 conversationId,
                 userId,
                 username,
-                message: `${username} has left the conversation.`,
+                message: `${username} has left the conversation`,
             })
             res.success(updatedConversation.toObject(), "Successfully left the conversation", 200)
         } else {
