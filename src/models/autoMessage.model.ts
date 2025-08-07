@@ -35,4 +35,7 @@ const autoMessageSchema = new Schema<IAutoMessage>(
 
 SoftDeleteModelMiddleware<IAutoMessage>(autoMessageSchema)
 
+autoMessageSchema.index({ sendDate: 1, isQueued: 1, isSent: 1, deletedAt: 1 })
+autoMessageSchema.index({ trigger: 1 })
+
 export const AutoMessage = model<IAutoMessage, SoftDeleteModel<IAutoMessage>>("AutoMessage", autoMessageSchema)

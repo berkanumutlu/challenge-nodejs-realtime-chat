@@ -52,6 +52,8 @@ const userSchema = new Schema<IUser>(
 
 SoftDeleteModelMiddleware<IUser>(userSchema)
 
+userSchema.index({ isActive: 1, deletedAt: 1 })
+
 // Before create
 userSchema.pre("save", async function (next) {
     if (this.isModified("password")) {

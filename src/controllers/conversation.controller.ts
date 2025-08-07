@@ -15,7 +15,7 @@ export const getUserConversations = async (req: IAuthenticatedRequest, res: Resp
 
         const { conversations, total } = await findUserConversations(req.user.id, limit, offset)
 
-        res.success(createPaginatedResponseData(conversations.map((conv) => conv.toObject()), total, limit, offset))
+        res.success(createPaginatedResponseData(conversations, total, limit, offset))
     } catch (error) {
         next(error)
     }
@@ -40,7 +40,7 @@ export const getConversationDetailsAndMessages = async (req: IAuthenticatedReque
         res.success(
             {
                 conversation: conversation.toObject(),
-                messages: createPaginatedResponseData(messages.map((msg) => msg.toObject()), total, messageLimit, messageOffset),
+                messages: createPaginatedResponseData(messages, total, messageLimit, messageOffset),
             }
         )
     } catch (error) {

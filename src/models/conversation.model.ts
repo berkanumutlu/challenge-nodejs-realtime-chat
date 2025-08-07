@@ -47,4 +47,6 @@ const conversationSchema = new Schema<IConversation>(
 
 SoftDeleteModelMiddleware<IConversation>(conversationSchema)
 
+conversationSchema.index({ participants: 1, deletedAt: 1 })
+
 export const Conversation = model<IConversation, SoftDeleteModel<IConversation>>("Conversation", conversationSchema)
