@@ -107,7 +107,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 
 ---
 
-#### 1.1. Kullanıcı Kaydı
+### 1.1. Kullanıcı Kaydı
 - **URL**: `POST /auth/register`
 - **Açıklama**: Yeni bir kullanıcı hesabı oluşturur.
 - **Kimlik Doğrulama:** Gerekli değil.
@@ -137,7 +137,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `400 Bad Request`: Doğrulama hatası (geçersiz e-posta, kullanıcı adı veya şifre formatı).
   - `409 Conflict`: E-posta veya kullanıcı adı zaten kullanımda.
 
-#### 1.2. Kullanıcı Girişi
+### 1.2. Kullanıcı Girişi
 - **URL**: `POST /auth/login`
 - **Açıklama**: Kullanıcının kimlik bilgilerini doğrulayarak erişim ve yenileme token'ları sağlar.
 - **Kimlik Doğrulama:** Gerekli değil.
@@ -172,7 +172,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `400 Bad Request`: Doğrulama hatası (geçersiz e-posta veya şifre formatı).
   - `401 Unauthorized`: Kullanıcı bulunamadı veya geçersiz kimlik bilgileri.
 
-#### 1.3. Token Yenileme
+### 1.3. Token Yenileme
 - **URL**: `POST /auth/refresh`
 - **Açıklama**: Kullanıcının kimlik bilgilerini doğrulayarak erişim ve yenileme token'ları sağlar.
 - **Kimlik Doğrulama:** Gerekli değil.
@@ -200,7 +200,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `400 Bad Request`: Doğrulama hatası (yenileme token'ı eksik).
   - `401 Unauthorized`: Geçersiz veya süresi dolmuş yenileme token'ı.
 
-#### 1.4. Kullanıcı Çıkışı
+### 1.4. Kullanıcı Çıkışı
 - **URL**: `POST /auth/logout`
 - **Açıklama**: Kullanıcının oturumunu sonlandırır ve mevcut erişim token'ını kara listeye alır.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -219,7 +219,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
   - `404 Not Found`: Kullanıcı bulunamadı.
 
-#### 1.5. Oturum Açmış Kullanıcı Bilgileri
+### 1.5. Oturum Açmış Kullanıcı Bilgileri
 - **URL**: `GET /auth/me`
 - **Açıklama**: Oturum açmış kullanıcının bilgilerini döndürür.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -250,7 +250,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 
 ---
 
-#### 2.1. Kullanıcı Listesi
+### 2.1. Kullanıcı Listesi
 - **URL**: `GET /user/list`
 - **Açıklama**: Sistemdeki aktif kullanıcıların (oturum açmış kullanıcı hariç) listesini sayfalama ile döndürür.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -295,7 +295,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 - **Hata Yanıtları:**
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
 
-#### 2.2. Kullanıcı Bilgilerini Güncelleme
+### 2.2. Kullanıcı Bilgilerini Güncelleme
 - **URL**: `PUT /user/update`
 - **Açıklama**: Oturum açmış kullanıcının bilgilerini günceller. Yalnızca sağlanan alanlar güncellenir.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -326,7 +326,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
   - `409 Conflict`: Güncellenmeye çalışılan e-posta veya kullanıcı adı zaten kullanımda.
 
-#### 2.3. Çevrimiçi Kullanıcı Listesi
+### 2.3. Çevrimiçi Kullanıcı Listesi
 - **URL**: `GET /user/online/list`
 - **Açıklama**: Şu anda çevrimiçi olan kullanıcıların ID'lerini veya detaylı bilgilerini döndürür.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -389,7 +389,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 - **Hata Yanıtları:**
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
 
-#### 2.4. Çevrimiçi Kullanıcı Sayısı
+### 2.4. Çevrimiçi Kullanıcı Sayısı
 - **URL**: `GET /user/online/count`
 - **Açıklama**: Şu anda çevrimiçi olan kullanıcıların toplam sayısını döndürür.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -409,7 +409,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 - **Hata Yanıtları:**
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
 
-#### 2.5. Kullanıcının Çevrimiçi Durumu
+### 2.5. Kullanıcının Çevrimiçi Durumu
 - **URL**: `GET /user/online/is-online/:userId`
 - **Açıklama**: Belirli bir kullanıcının çevrimiçi olup olmadığını kontrol eder.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -439,7 +439,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 
 ---
 
-#### 3.1. Kullanıcının Konuşmalarını Listeleme
+### 3.1. Kullanıcının Konuşmalarını Listeleme
 - **URL**: `GET /conversation/list`
 - **Açıklama**: Oturum açmış kullanıcının dahil olduğu tüm konuşmaları sayfalama ile döndürür.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -483,7 +483,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
 - **Hata Yanıtları:**
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
 
-#### 3.2. Konuşma Detayları ve Mesajları
+### 3.2. Konuşma Detayları ve Mesajları
 - **URL**: `GET /conversation/get/:conversationId`
 - **Açıklama**: Belirli bir konuşmanın detaylarını ve o konuşmadaki mesajları sayfalama ile döndürür.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -546,7 +546,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `403 Forbidden`: Kullanıcı bu konuşmanın katılımcısı değil.
   - `404 Not Found`: Konuşma bulunamadı.
 
-#### 3.3. Yeni Konuşma Oluşturma
+### 3.3. Yeni Konuşma Oluşturma
 - **URL**: `POST /conversation/create`
 - **Açıklama**: Yeni bir konuşma oluşturur. Eğer aynı katılımcılarla zaten bir konuşma varsa, mevcut konuşmayı döndürür. Oturum açmış kullanıcı otomatik olarak katılımcı olarak eklenir.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
@@ -607,7 +607,7 @@ Bu bölüm, uygulamaya ait mevcut API uç noktalarına genel bir bakış sunar. 
   - `400 Bad Request`: Doğrulama hatası (geçersiz `participantIds` formatı, katılımcı sayısı 2'den az veya geçersiz/aktif olmayan katılımcı ID'leri).
   - `401 Unauthorized`: Token sağlanmadı, geçersiz veya süresi dolmuş token.
 
-#### 3.4. Konuşma Detayları ve Mesajları
+### 3.4. Konuşma Detayları ve Mesajları
 - **URL**: `DELETE /conversation/leave/:conversationId`
 - **Açıklama**: Oturum açmış kullanıcının belirli bir konuşmadan ayrılmasını sağlar. Eğer konuşmada sadece 2 katılımcı varsa, konuşma soft-delete edilir.
 - **Kimlik Doğrulama:** Gerekli (JWT Access Token).
