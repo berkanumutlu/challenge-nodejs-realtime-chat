@@ -5,6 +5,7 @@ import { connectDB } from "@/services/db.service"
 import { connectRedis } from "@/services/redis.service"
 import { connectRabbitMQ } from "@/services/rabbitmq.service"
 import { initSocketIO } from "@/services/socket.service"
+import { startCronJobs } from "@/services/cron.service"
 import { startMessageQueueConsumer } from "@/services/messageQueue.service"
 
 const port = appConfig.port
@@ -16,6 +17,8 @@ const main = async () => {
         await connectDB()
         await connectRedis()
         await connectRabbitMQ()
+
+        startCronJobs()
 
         server.listen(port, () => {
             console.log(`env                    : ${appConfig.env}`)
