@@ -16,7 +16,7 @@ export const sanitizeAndValidateText = <T extends string>(
     if (!validationResult.success) {
         return {
             success: false,
-            error: validationResult.error.issues[0]?.message || "Invalid content format.",
+            error: validationResult.error.issues[0]?.message || "Invalid content format",
         }
     }
 
@@ -25,7 +25,7 @@ export const sanitizeAndValidateText = <T extends string>(
     if (!sanitizedContent || sanitizedContent.trim() === "") {
         return {
             success: false,
-            error: "Content cannot be empty after sanitization.",
+            error: "Content cannot be empty after sanitization",
         }
     }
 

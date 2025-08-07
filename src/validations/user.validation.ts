@@ -9,7 +9,7 @@ export const registerSchema = z.object({
         .string("Username is required")
         .min(3, "Username must be at least 3 characters")
         .max(30, "Username must be at most 30 characters")
-        .regex(usernameRegex, "The username can only contain letters, numbers, underscores (_), and dashes (-).")
+        .regex(usernameRegex, "The username can only contain letters, numbers, underscores (_), and dashes (-)")
         .nonempty("The username cannot contain spaces"),
     password: z.string("Password is required").min(6, "Password must be at least 6 characters"),
 })
