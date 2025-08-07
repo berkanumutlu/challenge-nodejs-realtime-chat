@@ -59,4 +59,7 @@ const messageSchema = new Schema<IMessage>(
 
 SoftDeleteModelMiddleware<IMessage>(messageSchema)
 
+messageSchema.index({ conversationId: 1, createdAt: 1 })
+messageSchema.index({ "readBy.userId": 1 })
+
 export const Message = model<IMessage, SoftDeleteModel<IMessage>>("Message", messageSchema)
