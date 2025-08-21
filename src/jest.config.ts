@@ -3,7 +3,11 @@
  * https://jestjs.io/docs/configuration
  */
 
-import type { Config } from 'jest';
+import type { Config } from "jest"
+import dotenv from "dotenv"
+
+// Load environment variables from .env.test
+dotenv.config({ path: ".env.test", quiet: true })
 
 const config: Config = {
   // All imported modules in your tests should be mocked automatically
@@ -201,6 +205,6 @@ const config: Config = {
   // watchman: true,
 
   forceExit: true,
-};
+}
 
-module.exports = config;
+export default config

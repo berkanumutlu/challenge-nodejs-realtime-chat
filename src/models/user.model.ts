@@ -18,7 +18,7 @@ const excludedFields = ["_id", "__v", "password", "refreshToken", "isActive", "u
 const userSchema = new Schema<IUser>(
     {
         username: { type: Schema.Types.String, required: true, unique: true, trim: true, match: /^[a-zA-Z0-9]+$/ },
-        email: { type: Schema.Types.String, required: true, unique: true, match: [/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please enter a valid email'], },
+        email: { type: Schema.Types.String, required: true, unique: true, match: [/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "Please enter a valid email"], },
         password: { type: Schema.Types.String, required: true },
         refreshToken: { type: Schema.Types.String, default: null },
         isActive: { type: Schema.Types.Boolean, default: true },

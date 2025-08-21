@@ -10,9 +10,9 @@ const mainRouter = Router()
 mainRouter.use(apiRateLimiter)
 
 // Route list
-mainRouter.use('/auth', authRoutes)
-mainRouter.use('/user', userRoutes)
-mainRouter.use('/conversation', conversationRoutes)
+mainRouter.use("/auth", authRoutes)
+mainRouter.use("/user", userRoutes)
+mainRouter.use("/conversation", conversationRoutes)
 
 // Route not found definition
 mainRouter.use((req, res) => {
