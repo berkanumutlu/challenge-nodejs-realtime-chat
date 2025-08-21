@@ -33,11 +33,13 @@ const shuffleArray = <T>(array: T[]): T[] => {
 export const startCronJobs = () => {
     // Message Planning Service (Cron Job every night at 02:00) "0 2 * * *"
     cron.schedule("0 2 * * *", async () => {
-        console.log("Running Message Planning Service (Cron Job)")
+        console.time("CronJobTime-0 2 * * *")
+        console.log("[CronJob] - Running Message Planning Service (Cron Job)")
         try {
             const activeUsers = await User.find({ isActive: true, deletedAt: null })
             if (activeUsers.length < 2) {
-                console.warn("Not enough active users to form pairs for auto messages")
+                console.warn("[CronJob] - Not enough active users to form pairs for auto messages")
+                console.timeEnd("CronJobTime-0 2 * * *")
                 return
             }
 
@@ -48,7 +50,7 @@ export const startCronJobs = () => {
                 const receiver = shuffledUsers[i + 1]
 
                 if (!sender || !receiver) {
-                    console.warn("Sender or receiver is undefined, skipping this pair")
+                    console.warn("[CronJob] - Sender or receiver is undefined, skipping this pair")
                     continue
                 }
 
@@ -69,17 +71,19 @@ export const startCronJobs = () => {
                     isSent: false,
                     createdBy: sender.id,
                 })
-                console.log(`Scheduled auto message from ${sender.username} to ${receiver.username}`)
+                console.log(`[CronJob] - Scheduled auto message from ${sender.username} to ${receiver.username}`)
             }
-            console.log("Message Planning Service finished successfully")
+            console.log("[CronJob] - Message Planning Service finished successfully")
         } catch (error) {
-            console.error("Error in Message Planning Service:", error)
+            console.error("[CronJob] - Error in Message Planning Service:", error)
         }
+        console.timeEnd("CronJobTime-0 2 * * *")
     })
 
     // Queue Management Service (Worker Cron Job Every Minute) "* * * * *"
     cron.schedule("* * * * *", async () => {
-        console.log("Running Queue Management Service (Cron Job)")
+        console.time("CronJobTime-* * * * *")
+        console.log("[CronJob] - Running Queue Management Service")
         try {
             const now = new Date()
             const messagesToQueue = await AutoMessage.find({
@@ -90,20 +94,22 @@ export const startCronJobs = () => {
             })
 
             if (messagesToQueue.length === 0) {
-                console.log("No auto messages to queue at this time")
+                console.log("[CronJob] - No auto messages to queue at this time")
+                console.timeEnd("CronJobTime-* * * * *")
                 return
             }
 
             for (const autoMessage of messagesToQueue) {
                 await publishToQueue("message_sending_queue", JSON.stringify(autoMessage.toObject()))
-                console.log(`AutoMessage ${autoMessage.id} sent to RabbitMQ queue`)
+                console.log(`[CronJob] - AutoMessage ${autoMessage.id} sent to RabbitMQ queue`)
 
                 autoMessage.isQueued = true
                 await autoMessage.save()
             }
-            console.log(`Queued ${messagesToQueue.length} auto messages`)
+            console.log(`[CronJob] - Queued ${messagesToQueue.length} auto messages`)
         } catch (error) {
-            console.error("Error in Queue Management Service:", error)
+            console.error("[CronJob] - Error in Queue Management Service:", error)
         }
+        console.timeEnd("CronJobTime-* * * * *")
     })
 }

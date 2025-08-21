@@ -13,6 +13,7 @@ const server = http.createServer(app)
 
 // Start the application
 const main = async () => {
+    console.time("serverStartTime")
     try {
         await connectDB()
         await connectRedis()
@@ -21,8 +22,8 @@ const main = async () => {
         startCronJobs()
 
         server.listen(port, () => {
-            console.log(`env                    : ${appConfig.env}`)
-            console.log(`Server running on port : ${port}`)
+            console.info(`[Server] - env: ${appConfig.env}`)
+            console.info(`[Server] - running on port : ${port}`)
             initSocketIO(server)
             startMessageQueueConsumer()
         })
@@ -30,5 +31,6 @@ const main = async () => {
         console.error("An error occurred while starting the server:", error)
         process.exit(1)
     }
+    console.timeEnd("serverStartTime")
 }
 main()

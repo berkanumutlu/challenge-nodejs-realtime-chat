@@ -17,6 +17,7 @@ import { sanitizeAndValidateText } from "@/utils/text.util"
 let io: SocketIOServer
 
 export const initSocketIO = (httpServer: HttpServer) => {
+    console.time("initSocketIOTime")
     io = new SocketIOServer(httpServer, {
         cors: {
             origin: appConfig.cors.origin,
@@ -29,7 +30,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
     const subClient = pubClient.duplicate()
     io.adapter(createAdapter(pubClient, subClient))
     // io.adapter(createShardedAdapter(pubClient, subClient))
-    console.log("Socket.IO Redis adapter initialized")
+    console.info("[Socket.IO] - Socket.IO Redis adapter initialized")
 
     // Socket.IO Auth Middleware
     io.use(async (socket: Socket, next) => {
@@ -62,10 +63,10 @@ export const initSocketIO = (httpServer: HttpServer) => {
 
     io.on("connection", async (socket: Socket) => {
         const user = socket.data.user
-        console.log(`A user connected: ${user.username} (${socket.id})`)
+        console.log(`[Socket.IO] - A user connected: ${user.username} (${socket.id})`)
 
         await addOnlineUser(user.id)
-        console.log(`User added to online list: ${user.username}`)
+        console.log(`[Socket.IO] - User added to online list: ${user.username}`)
 
         io.emit("user_online", { userId: user.id, username: user.username })
 
@@ -84,12 +85,12 @@ export const initSocketIO = (httpServer: HttpServer) => {
 
             if (!conversation.participants.some((p) => p.equals(user.id))) {
                 await addParticipantToConversation(roomId, user.id)
-                console.log(`User ${user.username} added to conversation ${roomId}`)
+                console.log(`[Socket.IO] - User ${user.username} added to conversation ${roomId}`)
             }
 
             const roomKey = getRoomKey(roomId)
             socket.join(roomKey)
-            console.log(`User ${user.username} joined room: ${roomKey}`)
+            console.log(`[Socket.IO] - User ${user.username} joined room: ${roomKey}`)
             io.to(roomKey).emit("user_joined_room", { userId: user.id, username: user.username, roomId })
         })
 
@@ -117,7 +118,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
                 })
 
                 await updateConversationLastMessage(conversationId, message.id)
-                console.log(`Conversation ${conversationId} lastMessageId updated to ${message.id}`)
+                console.log(`[Socket.IO] - Conversation ${conversationId} lastMessageId updated to ${message.id}`)
 
                 const roomKey = getRoomKey(conversationId)
                 io.to(roomKey).emit("message_received", {
@@ -128,7 +129,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
                     createdAt: message.createdAt,
                     username: user.username,
                 })
-                console.log(`Message sent to room ${roomKey} by ${user.username}`)
+                console.log(`[Socket.IO] - Message sent to room ${roomKey} by ${user.username}`)
             } catch (error) {
                 console.error("Error sending message:", error)
                 emitSocketError(socket, "message_error", "Failed to send message")
@@ -141,7 +142,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
 
                 const roomKey = getRoomKey(conversationId)
                 socket.to(roomKey).emit("user_typing", { userId: user.id, username: user.username, isTyping: true, conversationId })
-                console.log(`User ${user.username} started typing in room ${roomKey}`)
+                console.log(`[Socket.IO] - User ${user.username} started typing in room ${roomKey}`)
             } catch (error: any) {
                 emitSocketError(socket, "typing_error", error.issues[0]?.message || "Invalid typing status data")
             }
@@ -153,7 +154,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
 
                 const roomKey = getRoomKey(conversationId)
                 socket.to(roomKey).emit("user_typing", { userId: user.id, username: user.username, isTyping: false, conversationId })
-                console.log(`User ${user.username} stopped typing in room ${roomKey}`)
+                console.log(`[Socket.IO] - User ${user.username} stopped typing in room ${roomKey}`)
             } catch (error: any) {
                 emitSocketError(socket, "typing_error", error.issues[0]?.message || "Invalid typing status data")
             }
@@ -172,7 +173,7 @@ export const initSocketIO = (httpServer: HttpServer) => {
                         readAt: new Date(),
                         conversationId: updatedMessage.conversationId,
                     })
-                    console.log(`Message ${messageId} marked as read by ${user.username} in room ${roomKey}`)
+                    console.log(`[Socket.IO] - Message ${messageId} marked as read by ${user.username} in room ${roomKey}`)
                 } else {
                     emitSocketError(socket, "message_read_error", "Message not found or already marked as read by this user")
                 }
@@ -183,14 +184,15 @@ export const initSocketIO = (httpServer: HttpServer) => {
         })
 
         socket.on("disconnect", async () => {
-            console.log(`User disconnected: ${user.username} (${socket.id})`)
+            console.log(`[Socket.IO] - User disconnected: ${user.username} (${socket.id})`)
             await removeOnlineUser(user.id)
-            console.log(`User removed from online list: ${user.username}`)
+            console.log(`[Socket.IO] - User removed from online list: ${user.username}`)
 
             io.emit("user_offline", { userId: user.id, username: user.username })
         })
     })
 
+    console.timeEnd("initSocketIOTime")
     return io
 }
 
