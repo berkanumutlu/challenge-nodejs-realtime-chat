@@ -1,5 +1,5 @@
 import { type Document, model, Schema, Types } from "mongoose"
-import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middlewares/db.middleware"
+import { SoftDeleteModelMiddleware, type ISoftDeleteDocument, type ISoftDeleteModel } from "@/middlewares/db.middleware"
 
 export interface IMessageReadBy {
     _id: Types.ObjectId
@@ -7,7 +7,7 @@ export interface IMessageReadBy {
     readAt: Date
 }
 
-export interface IMessage extends Document, SoftDeleteDocument {
+export interface IMessage extends Document, ISoftDeleteDocument {
     conversationId: Types.ObjectId
     senderId: Types.ObjectId
     content: string
@@ -62,4 +62,4 @@ SoftDeleteModelMiddleware<IMessage>(messageSchema)
 messageSchema.index({ conversationId: 1, createdAt: 1 })
 messageSchema.index({ "readBy.userId": 1 })
 
-export const Message = model<IMessage, SoftDeleteModel<IMessage>>("Message", messageSchema)
+export const Message = model<IMessage, ISoftDeleteModel<IMessage>>("Message", messageSchema)

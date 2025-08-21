@@ -1,8 +1,8 @@
 import { type Document, model, Schema, Types } from "mongoose"
-import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middlewares/db.middleware"
+import { SoftDeleteModelMiddleware, type ISoftDeleteDocument, type ISoftDeleteModel } from "@/middlewares/db.middleware"
 import { encryptText } from "@/utils/crypt.util"
 
-export interface IUser extends Document, SoftDeleteDocument {
+export interface IUser extends Document, ISoftDeleteDocument {
     _id: Types.ObjectId
     username: string
     email: string
@@ -71,4 +71,4 @@ userSchema.pre("findOneAndUpdate", async function (next) {
     next()
 })
 
-export const User = model<IUser, SoftDeleteModel<IUser>>("User", userSchema)
+export const User = model<IUser, ISoftDeleteModel<IUser>>("User", userSchema)

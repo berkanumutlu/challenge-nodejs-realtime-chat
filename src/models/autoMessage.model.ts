@@ -1,7 +1,7 @@
 import { type Document, model, Schema, Types } from "mongoose"
-import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middlewares/db.middleware"
+import { SoftDeleteModelMiddleware, type ISoftDeleteDocument, type ISoftDeleteModel } from "@/middlewares/db.middleware"
 
-export interface IAutoMessage extends Document, SoftDeleteDocument {
+export interface IAutoMessage extends Document, ISoftDeleteDocument {
     _id: Types.ObjectId
     trigger: string // e.g. "welcome", "reminder"
     content: string
@@ -38,4 +38,4 @@ SoftDeleteModelMiddleware<IAutoMessage>(autoMessageSchema)
 autoMessageSchema.index({ sendDate: 1, isQueued: 1, isSent: 1, deletedAt: 1 })
 autoMessageSchema.index({ trigger: 1 })
 
-export const AutoMessage = model<IAutoMessage, SoftDeleteModel<IAutoMessage>>("AutoMessage", autoMessageSchema)
+export const AutoMessage = model<IAutoMessage, ISoftDeleteModel<IAutoMessage>>("AutoMessage", autoMessageSchema)
