@@ -8,15 +8,17 @@ import { findUserById } from "@/services/user.service"
 import { getRoomKey } from "@/utils/socket.util"
 
 export const startMessageQueueConsumer = () => {
+    console.time("startMessageQueueConsumer")
     consumeFromQueue("message_sending_queue", async (messageContent) => {
-        console.log("Received message from queue:", messageContent)
+        console.time("consumeFromQueueTime")
+        console.log("[MessageQueue] - Received message from queue:", messageContent)
         try {
             const autoMessageData: IAutoMessage = JSON.parse(messageContent)
 
             // Check if the message has already been sent to prevent duplicates if consumer restarts
             const existingAutoMessage = await AutoMessage.findById(autoMessageData.id)
             if (existingAutoMessage && existingAutoMessage.isSent) {
-                return console.log(`AutoMessage ${autoMessageData.id} already sent. Skipping`)
+                return console.log(`[MessageQueue] - AutoMessage ${autoMessageData.id} already sent. Skipping`)
             }
 
             const senderId = autoMessageData.options?.senderId
@@ -35,7 +37,7 @@ export const startMessageQueueConsumer = () => {
 
                 if (!conversation) {
                     conversation = await createConversation(participantIds, senderId.toString())
-                    console.log(`New conversation created for auto message: ${conversation.id}`)
+                    console.log(`[MessageQueue] - New conversation created for auto message: ${conversation.id}`)
                 }
                 targetConversationId = conversation.id
             } else {
@@ -64,15 +66,16 @@ export const startMessageQueueConsumer = () => {
                 createdAt: newMessage.createdAt,
                 username: senderUsername,
             })
-            console.log(`Auto message ${newMessage.id} sent to conversation ${targetConversationId} via Socket.IO`)
+            console.log(`[MessageQueue] - Auto message ${newMessage.id} sent to conversation ${targetConversationId} via Socket.IO`)
 
             // Mark AutoMessage as sent
             await AutoMessage.findByIdAndUpdate(autoMessageData.id, { isSent: true })
-            console.log(`AutoMessage ${autoMessageData._id} marked as sent`)
-
+            console.log(`[MessageQueue] - AutoMessage ${autoMessageData._id} marked as sent`)
         } catch (error) {
-            console.error("Error processing message from queue:", error)
+            console.error("[MessageQueue] - Error processing message from queue:", error)
         }
+        console.timeEnd("consumeFromQueueTime")
     })
-    console.log("RabbitMQ Message Distribution Service started (Consumer)")
+    console.log("[MessageQueue] - Message Distribution Service started (Consumer)")
+    console.timeEnd("startMessageQueueConsumer")
 }

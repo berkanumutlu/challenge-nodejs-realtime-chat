@@ -6,7 +6,7 @@ import { CustomHttpError } from "@/errors/customHttpError"
 import { verifyAccessToken } from "@/utils/crypt.util"
 
 export const authenticatedMiddleware = async (req: IAuthenticatedRequest, res: Response, next: NextFunction) => {
-    const token = req?.headers?.authorization?.replace('Bearer ', '')
+    const token = req?.headers?.authorization?.replace("Bearer ", "")
     if (!token) throw new CustomHttpError(401, "Token not provided")
 
     const isBlacklistedToken = await isTokenBlacklisted(token)

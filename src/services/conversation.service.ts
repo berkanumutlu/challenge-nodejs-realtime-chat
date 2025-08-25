@@ -36,7 +36,6 @@ export const findExistingConversationByParticipants = async (
     }).populate("participants", "username email")
 }
 
-
 export const createConversation = async (participantIds: string[], createdBy: string): Promise<IConversation> => {
     const sortedParticipantIds = [...new Set(participantIds)].sort()
     const participants = sortedParticipantIds.map((id) => new Types.ObjectId(id))

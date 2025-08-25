@@ -5,14 +5,16 @@ let channel: amqp.Channel
 let connection: amqp.Connection
 
 export const connectRabbitMQ = async () => {
+    console.time("rabbitMQConnectionTime")
     try {
         connection = await amqp.connect(rabbitmqConfig.url)
         channel = await connection.createChannel()
-        console.log("RabbitMQ connected")
+        console.log("[RabbitMQ] - connected")
     } catch (error) {
-        console.error("RabbitMQ connection failed:", error)
+        console.error("[RabbitMQ] - connection failed:", error)
         process.exit(1)
     }
+    console.timeEnd("rabbitMQConnectionTime")
 }
 
 export const getRabbitMQChannel = () => {
@@ -30,11 +32,12 @@ export const publishToQueue = async (queueName: string, message: string) => {
 
     await channel.assertQueue(queueName, { durable: true })
     channel.sendToQueue(queueName, Buffer.from(message))
-    console.log(`Message sent to ${queueName}: ${message}`)
+    console.log(`[RabbitMQ] - Message sent to ${queueName}: ${message}`)
 }
 
 // Consumer
 export const consumeFromQueue = async (queueName: string, callback: (msg: string) => void) => {
+    console.time("consumeFromQueueTime")
     if (!channel) {
         throw new Error("RabbitMQ channel not initialized!")
     }
@@ -49,5 +52,6 @@ export const consumeFromQueue = async (queueName: string, callback: (msg: string
         },
         { noAck: false },
     )
-    console.log(`Consuming from ${queueName}`)
+    console.log(`[RabbitMQ] - Consuming from ${queueName}`)
+    console.timeEnd("consumeFromQueueTime")
 }

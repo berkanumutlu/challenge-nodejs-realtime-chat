@@ -1,13 +1,13 @@
 import { Model, Schema, Types } from "mongoose"
 
-export interface SoftDeleteDocument {
+export interface ISoftDeleteDocument {
     deletedAt: Date | null
     deletedBy: Types.ObjectId | null
     softDelete(deletedBy?: string): Promise<void>
     restore(): Promise<void>
 }
 
-export interface SoftDeleteModel<T> extends Model<T> {
+export interface ISoftDeleteModel<T> extends Model<T> {
     softDeleteById(id: string, deletedBy?: string): Promise<void>
     restoreById(id: string): Promise<void>
 }

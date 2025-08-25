@@ -1,8 +1,8 @@
 import { type Document, model, Schema, Types } from "mongoose"
-import { SoftDeleteModelMiddleware, type SoftDeleteDocument, type SoftDeleteModel } from "@/middlewares/db.middleware"
+import { SoftDeleteModelMiddleware, type ISoftDeleteDocument, type ISoftDeleteModel } from "@/middlewares/db.middleware"
 import { encryptText } from "@/utils/crypt.util"
 
-export interface IUser extends Document, SoftDeleteDocument {
+export interface IUser extends Document, ISoftDeleteDocument {
     _id: Types.ObjectId
     username: string
     email: string
@@ -18,7 +18,7 @@ const excludedFields = ["_id", "__v", "password", "refreshToken", "isActive", "u
 const userSchema = new Schema<IUser>(
     {
         username: { type: Schema.Types.String, required: true, unique: true, trim: true, match: /^[a-zA-Z0-9]+$/ },
-        email: { type: Schema.Types.String, required: true, unique: true, match: [/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please enter a valid email'], },
+        email: { type: Schema.Types.String, required: true, unique: true, match: [/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, "Please enter a valid email"], },
         password: { type: Schema.Types.String, required: true },
         refreshToken: { type: Schema.Types.String, default: null },
         isActive: { type: Schema.Types.Boolean, default: true },
@@ -71,4 +71,4 @@ userSchema.pre("findOneAndUpdate", async function (next) {
     next()
 })
 
-export const User = model<IUser, SoftDeleteModel<IUser>>("User", userSchema)
+export const User = model<IUser, ISoftDeleteModel<IUser>>("User", userSchema)

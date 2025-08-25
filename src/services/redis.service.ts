@@ -1,20 +1,22 @@
 import { createClient, type RedisClientType } from "redis"
-import { env } from "@/config/env.config"
+import { redisConfig } from "@/config/redis.config"
 
 let redisClient: RedisClientType
 
 export const connectRedis = async () => {
+    console.time("redisConnectionTime")
     try {
         redisClient = createClient({
-            url: env.redis.url,
+            url: redisConfig.url,
         })
         redisClient.on("error", (err) => console.error("Redis Client Error", err))
         await redisClient.connect()
-        console.log("Redis connected")
+        console.log("[Redis] - connected")
     } catch (error) {
-        console.error("Redis connection failed:", error)
+        console.error("[Redis] - connection failed:", error)
         process.exit(1)
     }
+    console.timeEnd("redisConnectionTime")
 }
 
 export const getRedisClient = (): RedisClientType => {
