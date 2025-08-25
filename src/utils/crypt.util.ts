@@ -20,6 +20,14 @@ export const verifyToken = (token: string, key: string): CryptPayloadReturnType 
     return jwt.verify(token, key) as CryptPayloadReturnType
 }
 
+export const verifyAccessToken = (token: string): CryptPayloadReturnType => {
+    return verifyToken(token, cryptConfig.keys.access.secret.key)
+}
+
+export const verifyRefreshToken = (token: string): CryptPayloadReturnType => {
+    return verifyToken(token, cryptConfig.keys.refresh.secret.key)
+}
+
 export const convertExpiresInToSeconds = (expiresIn: string): number => {
     const value = Number.parseInt(expiresIn.slice(0, -1))
     const timeUnit = expiresIn.slice(-1)
@@ -50,12 +58,4 @@ export const generateUserTokens = (userId: string) => {
     const accessToken = generateAccessToken(userId)
     const refreshToken = generateRefreshToken(userId)
     return { accessToken, refreshToken }
-}
-
-export const verifyAccessToken = (token: string): CryptPayloadReturnType => {
-    return verifyToken(token, cryptConfig.keys.access.secret.key)
-}
-
-export const verifyRefreshToken = (token: string): CryptPayloadReturnType => {
-    return verifyToken(token, cryptConfig.keys.refresh.secret.key)
 }

@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express"
 import { ZodError } from "zod"
-import { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import { appConfig } from "@/config/app.config"
 import { createResponse } from "@/middlewares/response.middleware"
 import { CustomHttpError } from "@/errors/customHttpError"
@@ -18,11 +18,11 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
         return res.status(400).json(createResponse(false, 400, "ValidationError", null, errors))
     }
 
-    if (err instanceof JsonWebTokenError) {
+    if (err instanceof jwt.JsonWebTokenError) {
         return res.warning("Invalid token", 401)
     }
 
-    if (err instanceof TokenExpiredError) {
+    if (err instanceof jwt.TokenExpiredError) {
         return res.warning("Token expired", 401)
     }
 
